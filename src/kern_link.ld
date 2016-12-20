@@ -38,5 +38,6 @@ SECTIONS
         __bss_end = .;
     }
 
+    whereami = .;
     kernel_end = ALIGN(0x1000);
 }

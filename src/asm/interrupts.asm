@@ -1,10 +1,17 @@
 ; No idea why this is 0x100010 instead of 0x100000
 ; Actually, it's very probably because multiboot is
 ; before .text
-%define KERNEL_BASE 0x100010
+; UPDATE:
+; AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+; UPDATE 2:
+; Ah, the offset I need to add is based off of the
+; address of where the assembly portion gets
+; relocated to.
+%define KERNEL_BASE 0x100000 + 0x2E0
 
 ; IDT STUFF
 
+global cvos_interrupt_0
 cvos_interrupt_0:
 ; Divide by zero
     ; Push registers
@@ -16,6 +23,7 @@ cvos_interrupt_0:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_1
 cvos_interrupt_1:
 ; Debug
     ; Push registers
@@ -27,6 +35,7 @@ cvos_interrupt_1:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_2
 cvos_interrupt_2:
 ; NMI
     ; Push registers
@@ -38,6 +47,7 @@ cvos_interrupt_2:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_3
 cvos_interrupt_3:
 ; Breakpoint
     ; Push registers
@@ -49,6 +59,7 @@ cvos_interrupt_3:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_4
 cvos_interrupt_4:
 ; Overflow
     ; Push registers
@@ -60,6 +71,7 @@ cvos_interrupt_4:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_5
 cvos_interrupt_5:
 ; Bound Range Exceeded
     ; Push registers
@@ -71,6 +83,7 @@ cvos_interrupt_5:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_6
 cvos_interrupt_6:
 ; Invalid Opcode
     ; Push registers
@@ -82,6 +95,7 @@ cvos_interrupt_6:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_7
 cvos_interrupt_7:
 ; Device Not Available
     ; Push registers
@@ -93,6 +107,7 @@ cvos_interrupt_7:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_8
 cvos_interrupt_8:
 ; Double Fault
     ; Push registers
@@ -102,6 +117,7 @@ cvos_interrupt_8:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_9
 cvos_interrupt_9:
 ; Coprocessor Segment Overrun
     ; Push registers
@@ -113,6 +129,7 @@ cvos_interrupt_9:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_10
 cvos_interrupt_10:
 ; Invalid TSS
     ; Push registers
@@ -122,6 +139,7 @@ cvos_interrupt_10:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_11
 cvos_interrupt_11:
 ; Segment Not Present
     ; Push registers
@@ -131,6 +149,7 @@ cvos_interrupt_11:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_12
 cvos_interrupt_12:
 ; Stack Segment Fault
     ; Push registers
@@ -140,6 +159,7 @@ cvos_interrupt_12:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_13
 cvos_interrupt_13:
 ; General Protection Fault
     ; Push registers
@@ -149,6 +169,7 @@ cvos_interrupt_13:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_14
 cvos_interrupt_14:
 ; Page Fault
     ; Push registers
@@ -158,6 +179,7 @@ cvos_interrupt_14:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_15
 cvos_interrupt_15:
 ; RESERVED
     ; Push registers
@@ -169,6 +191,7 @@ cvos_interrupt_15:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_16
 cvos_interrupt_16:
 ; x87 Floating Point Exception
     ; Push registers
@@ -180,6 +203,7 @@ cvos_interrupt_16:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_17
 cvos_interrupt_17:
 ; Alignment Check
     ; Push registers
@@ -189,6 +213,7 @@ cvos_interrupt_17:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_18
 cvos_interrupt_18:
 ; Machine Check
     ; Push registers
@@ -200,6 +225,7 @@ cvos_interrupt_18:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_19
 cvos_interrupt_19:
 ; SIMD Floating-Point Exception
     ; Push registers
@@ -211,6 +237,7 @@ cvos_interrupt_19:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_20
 cvos_interrupt_20:
 ; Virtualization Error
     ; Push registers
@@ -222,6 +249,7 @@ cvos_interrupt_20:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_21
 cvos_interrupt_21:
 ; RESERVED
     ; Push registers
@@ -233,6 +261,7 @@ cvos_interrupt_21:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_22
 cvos_interrupt_22:
 ; RESERVED
     ; Push registers
@@ -244,6 +273,7 @@ cvos_interrupt_22:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_23
 cvos_interrupt_23:
 ; RESERVED
     ; Push registers
@@ -255,6 +285,7 @@ cvos_interrupt_23:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_24
 cvos_interrupt_24:
 ; RESERVED
     ; Push registers
@@ -266,6 +297,7 @@ cvos_interrupt_24:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_25
 cvos_interrupt_25:
 ; RESERVED
     ; Push registers
@@ -277,6 +309,7 @@ cvos_interrupt_25:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_26
 cvos_interrupt_26:
 ; RESERVED
     ; Push registers
@@ -288,6 +321,7 @@ cvos_interrupt_26:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_27
 cvos_interrupt_27:
 ; RESERVED
     ; Push registers
@@ -299,6 +333,7 @@ cvos_interrupt_27:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_28
 cvos_interrupt_28:
 ; RESERVED
     ; Push registers
@@ -310,6 +345,7 @@ cvos_interrupt_28:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_29
 cvos_interrupt_29:
 ; RESERVED
     ; Push registers
@@ -321,6 +357,7 @@ cvos_interrupt_29:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_30
 cvos_interrupt_30:
 ; Security Exception
     ; Push registers
@@ -330,6 +367,7 @@ cvos_interrupt_30:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_31
 cvos_interrupt_31:
 ; RESERVED
     ; Push registers
@@ -341,6 +379,7 @@ cvos_interrupt_31:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_32
 cvos_interrupt_32:
 ; IRQ0
     ; Push registers
@@ -352,6 +391,7 @@ cvos_interrupt_32:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_33
 cvos_interrupt_33:
 ; IRQ1
     ; Push registers
@@ -363,6 +403,7 @@ cvos_interrupt_33:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_34
 cvos_interrupt_34:
 ; IRQ2
     ; Push registers
@@ -374,6 +415,7 @@ cvos_interrupt_34:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_35
 cvos_interrupt_35:
 ; IRQ3
     ; Push registers
@@ -385,6 +427,7 @@ cvos_interrupt_35:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_36
 cvos_interrupt_36:
 ; IRQ4
     ; Push registers
@@ -396,6 +439,7 @@ cvos_interrupt_36:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_37
 cvos_interrupt_37:
 ; IRQ5
     ; Push registers
@@ -407,6 +451,7 @@ cvos_interrupt_37:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_38
 cvos_interrupt_38:
 ; IRQ6
     ; Push registers
@@ -418,6 +463,7 @@ cvos_interrupt_38:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_39
 cvos_interrupt_39:
 ; IRQ7
     ; Push registers
@@ -429,6 +475,7 @@ cvos_interrupt_39:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_40
 cvos_interrupt_40:
 ; IRQ8
     ; Push registers
@@ -440,6 +487,7 @@ cvos_interrupt_40:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_41
 cvos_interrupt_41:
 ; IRQ9
     ; Push registers
@@ -451,6 +499,7 @@ cvos_interrupt_41:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_42
 cvos_interrupt_42:
 ; IRQ10
     ; Push registers
@@ -462,6 +511,7 @@ cvos_interrupt_42:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_43
 cvos_interrupt_43:
 ; IRQ11
     ; Push registers
@@ -473,6 +523,7 @@ cvos_interrupt_43:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_44
 cvos_interrupt_44:
 ; IRQ12
     ; Push registers
@@ -484,6 +535,7 @@ cvos_interrupt_44:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_45
 cvos_interrupt_45:
 ; IRQ13
     ; Push registers
@@ -495,6 +547,7 @@ cvos_interrupt_45:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_46
 cvos_interrupt_46:
 ; IRQ14
     ; Push registers
@@ -506,6 +559,7 @@ cvos_interrupt_46:
     ; Jump to common
     jmp cvos_interrupt_common
 
+global cvos_interrupt_47
 cvos_interrupt_47:
 ; IRQ15
     ; Push registers
@@ -555,7 +609,7 @@ struc IDTEntry
 endstruc
 
 cvos_idtr:
-    dw (cvos_idt.end - cvos_idt) + 1 ; size
+    dw (cvos_idt.end - cvos_idt) - 1 ; size
     dd cvos_idt          ; offset
 
 cvos_idt:

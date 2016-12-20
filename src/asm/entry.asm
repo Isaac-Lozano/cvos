@@ -48,7 +48,7 @@ kernel_entry:
     mov cx, cvos_gdt.tss
     ltr cx
     ; Load IDT
-    lidt [cvos_idtr]
+;    lidt [cvos_idtr]
     ; Init stack
     mov esp, stack_top
     ; Load CS
@@ -152,4 +152,4 @@ tss:
     iend
 .end:
 
-%include "interrupts.asm"
+%include "int.asm"

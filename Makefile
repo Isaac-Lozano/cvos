@@ -5,7 +5,7 @@ SRC = src
 BUILD = bin/$(TARGET)
 ISODIR = isodir
 
-COBJECTS = $(addprefix $(SRC)/,kernel.o)
+COBJECTS = $(addprefix $(SRC)/,kernel.o vga.o pic.o pio.o idt.o pfa.o mmu.o)
 ASMOBJECTS = $(addprefix $(SRC)/asm/,entry.o)
 
 GCC = i686-elf-gcc 
@@ -16,10 +16,10 @@ AS = nasm
 all: cvos.iso
 
 clean:
-	rm -rf $(BUILD)/* cvos.iso $(ISODIR)/boot/grub/grub.cfg $(SRC)/*.o $(SRC)/asm/*.o
+	rm -rf $(BUILD)/* cvos.iso $(ISODIR)/boot/cvos.bin $(SRC)/*.o $(SRC)/asm/*.o
 
 %.o: %.c
-	$(GCC) -std=gnu99 -ffreestanding -O2 -Wall -Wextra -o $@ -c $<
+	$(GCC) -std=gnu99 -ggdb -ffreestanding -Wall -Wextra -o $@ -c $<
 
 $(ASMOBJECTS): %.o: %.asm
 	$(AS) -f elf32 -i $(SRC)/asm/ -o $@ $<
