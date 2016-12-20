@@ -5,7 +5,7 @@ SRC = src
 BUILD = bin/$(TARGET)
 ISODIR = isodir
 
-COBJECTS = $(addprefix $(SRC)/,kernel.o vga.o pic.o pio.o idt.o pfa.o mmu.o)
+COBJECTS = $(addprefix $(SRC)/,kernel.o vga.o pic.o pio.o idt.o pfa.o mmu.o keyboard/keyboard.o structures/queue.o)
 ASMOBJECTS = $(addprefix $(SRC)/asm/,entry.o)
 
 GCC = i686-elf-gcc 

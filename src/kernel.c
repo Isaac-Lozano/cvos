@@ -1,5 +1,7 @@
 #include "vga.h"
+#include "keyboard/keyboard.h"
 #include "idt.h"
+#include "mmu.h"
 #include "pic.h"
 #include "pio.h"
 #include "pfa.h"
@@ -9,6 +11,7 @@
 
 void cvos_kernel(uint32_t magic, multiboot_info_t *multiboot)
 {
+    vga_text_clear();
     vga_text_printf("CVOS booting...\n");
     vga_text_printf("Magic number: %x\n", magic);
 
@@ -54,7 +57,7 @@ void int_pit()
     if(timer == 10)
     {
         timer = 0;
-        vga_text_printf("Ping. ");
+//        vga_text_printf("Ping. ");
     }
 }
 
@@ -75,7 +78,8 @@ void cvos_interrupt_handler(uint32_t int_num, uint32_t err_code)
             break;
         case 0x21:
             /* kbhit */
-            int_kbhit();
+            keyboard_int();
+//            int_kbhit();
             break;
     }
 
