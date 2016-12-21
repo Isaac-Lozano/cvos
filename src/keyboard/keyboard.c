@@ -59,7 +59,10 @@ void keyboard_int()
 
     if(ch != 0 && pressed)
     {
+        /* TODO: put these in main proc */
         vga_text_print_char(ch);
+        vga_text_update_cursor();
+
         enqueue(&kb_q, ch);
     }
 }

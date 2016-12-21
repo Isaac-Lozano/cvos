@@ -1,5 +1,7 @@
 #include "vga.h"
 
+#include "pio.h"
+
 #include <stdint.h>
 #include <stdarg.h>
 
@@ -7,7 +9,12 @@
 #define VGA_TEXT_HEIGHT 25
 #define VGA_TEXT_BUFFER ((uint16_t*)0xB8000)
 
-static uint16_t *vga_text_cursor_ptr = (uint16_t*) 0xB8000;
+#define VGA_INDEX_PORT 0x3D4
+#define VGA_DATA_PORT 0x3D5
+#define VGA_CURSOR_INDEX_LOW 0x0F
+#define VGA_CURSOR_INDEX_HIGH 0x0E
+
+static uint16_t *vga_text_cursor_ptr = VGA_TEXT_BUFFER;
 
 void vga_text_clear()
 {
@@ -116,4 +123,13 @@ void vga_text_printf(const char* format, ...)
             format++;
         }
     }
+}
+
+void vga_text_update_cursor()
+{
+    outb(VGA_INDEX_PORT, VGA_CURSOR_INDEX_LOW);
+    outb(VGA_DATA_PORT, (int)(vga_text_cursor_ptr - VGA_TEXT_BUFFER) & 0xFF);
+
+    outb(VGA_INDEX_PORT, VGA_CURSOR_INDEX_HIGH);
+    outb(VGA_DATA_PORT, ((int)(vga_text_cursor_ptr - VGA_TEXT_BUFFER) >> 8) & 0xFF);
 }

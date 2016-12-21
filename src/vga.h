@@ -8,5 +8,6 @@ void vga_text_print_decimal(int d);
 void vga_text_print_string(const char *str);
 void vga_text_print_hex(int d);
 void vga_text_printf(const char* format, ...);
+void vga_text_update_cursor();
 
 #endif /* __VGA_H__ */
