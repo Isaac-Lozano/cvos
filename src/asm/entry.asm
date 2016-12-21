@@ -12,30 +12,76 @@ align 4
     dd FLAGS
     dd CHECKSUM
 
+; boot stack
 section .bootstrap_stack, nobits
 ; Make stack 4k
 align 4
 stack_bottom:
-resb 4096
+resb 0x1000
 stack_top:
 
+; kernel stack for interrupts
 section .ring0_stack, nobits
 ; Make stack 4k
 align 4
 ring0_stack_bottom:
-resb 4096
+resb 0x1000
 ring0_stack_top:
+
+section .data
+MMU_PRESENT equ 1 << 0
+MMU_RW      equ 1 << 1
+
+KERNEL_VIRTUAL_BASE equ 0xc0000000
+KERNEL_VIRTUAL_PAGE_NUM equ KERNEL_VIRTUAL_BASE >> 22
+
+; XXX: This assumes that our kernel is < 3M in size
+; Also we're using '+' instead of '|' because we can't use
+; '|' on non-scalar values. bleh.
+align 0x1000
+kernel_page_directory:
+dd (kernel_page_table - KERNEL_VIRTUAL_BASE) + (MMU_PRESENT | MMU_RW)
+times (KERNEL_VIRTUAL_PAGE_NUM - 1) dd 0
+dd (kernel_page_table - KERNEL_VIRTUAL_BASE) + (MMU_PRESENT | MMU_RW)
+times (0x400 - KERNEL_VIRTUAL_PAGE_NUM - 1) dd 0
+
+align 0x1000
+kernel_page_table:
+%assign i 0
+%rep 0x400
+    dd (i << 12) | MMU_PRESENT | MMU_RW
+%assign i i+1
+%endrep
+
 
 ; Entry code. Gets called by the multiboot bootloader
 section .text
 
+; higher-half address
+HIGHER_HALF_ADDR equ 0xc0000000
+
 global kernel_entry
-kernel_entry:
+kernel_entry equ (_kernel_entry - HIGHER_HALF_ADDR)
+_kernel_entry:
     ; Clear interrupts till
     ; we have the IDT set up
     cli
+
+    ; load mmu
+    mov ecx, (kernel_page_directory - KERNEL_VIRTUAL_BASE)
+    mov cr3, ecx
+    mov ecx, cr0
+    or ecx, 0x80000000
+    mov cr0, ecx
+
+    ; jump to higher half
+    lea ecx, [.higher_half]
+    jmp ecx
+
+.higher_half:
     ; Load gdt
     lgdt [cvos_gdtr]
+
     ; Reload our segments
     mov cx, cvos_gdt.data
     mov ds, cx
@@ -43,24 +89,29 @@ kernel_entry:
     mov fs, cx
     mov gs, cx
     mov ss, cx
+
     ; Set up TSS
-    ; ; Doesn't seem to be needed?
+    ; Doesn't seem to be needed?
     mov cx, cvos_gdt.tss
     ltr cx
-    ; Load IDT
-;    lidt [cvos_idtr]
+
     ; Init stack
     mov esp, stack_top
+
     ; Load CS
     jmp cvos_gdt.code:.call_kernel
+
 .call_kernel:
+    ; TODO: remap multiboot structure
     ; Call kernel code
     extern cvos_kernel
     push ebx
     push eax
     call cvos_kernel
+
     ; HANG
     cli
+
 .hang:
     hlt
     jmp .hang

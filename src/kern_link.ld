@@ -1,14 +1,21 @@
+HIGHER_HALF_ADDR = 0xc0000000;
+
 /* We start at kernel_entry */
 ENTRY(kernel_entry)
 
 SECTIONS
 {
     /* Make a variable for our kernel base */
-    kernel_base = 1M;
+    /* This will be at 0xc0000000 + 1M for
+     * our higher half kernel
+     */
+    kernel_base = HIGHER_HALF_ADDR + 1M;
     . = kernel_base;
 
     /* First we have our text section */
-    .text : {
+    /* Loaded at 1M, but virtual address above */
+    /* Will be page aligned to ease paging */
+    .text ALIGN(4K): AT(ADDR(.text) - HIGHER_HALF_ADDR) {
         __text_start = .;
         /* Multiboot has to be near the beginning */
         KEEP(*(.multiboot*))
@@ -18,21 +25,21 @@ SECTIONS
     }
 
     /* RO data */
-    .rodata : {
+    .rodata ALIGN(4K): AT(ADDR(.rodata) - HIGHER_HALF_ADDR) {
         __rodata_start = .;
         *(.rodata*)
         __rodata_end = .;
     }
 
     /* Data */
-    .data : {
+    .data ALIGN(4K): AT(ADDR(.data) - HIGHER_HALF_ADDR) {
         __data_start = .;
         *(.data*)
         __data_end = .;
     }
 
     /* Zero'd data */
-    .bss : {
+    .bss ALIGN(4K): AT(ADDR(.bss) - HIGHER_HALF_ADDR) {
         __bss_start = .;
         *(.bss*)
         __bss_end = .;

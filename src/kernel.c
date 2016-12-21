@@ -39,7 +39,7 @@ void cvos_kernel(uint32_t magic, multiboot_info_t *multiboot)
 extern int kernel_end;
     vga_text_printf("kernel_end: %x\n", (int)&kernel_end);
 
-    mmu_init();
+//    mmu_init();
 
     asm("sti");
 
