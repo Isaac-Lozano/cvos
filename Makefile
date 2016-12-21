@@ -16,7 +16,7 @@ AS = nasm
 all: cvos.iso
 
 clean:
-	rm -rf $(BUILD)/* cvos.iso $(ISODIR)/boot/cvos.bin $(SRC)/*.o $(SRC)/asm/*.o
+	rm -rf $(BUILD)/* cvos.iso $(ISODIR)/boot/cvos.bin $(SRC)/*.o $(SRC)/asm/*.o $(SRC)/keyboard/*.o $(SRC)/structures/*.o
 
 %.o: %.c
 	$(GCC) -std=gnu99 -ggdb -ffreestanding -Wall -Wextra -o $@ -c $<
